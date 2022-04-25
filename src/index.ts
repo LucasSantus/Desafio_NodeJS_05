@@ -6,6 +6,9 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import Student from "./types/Student";
+
+const readline = require('readline-sync');
 
 dotenv.config();
 
@@ -36,8 +39,21 @@ app.use(express.json());
 app.listen(PORT, () => {
 	console.log(`Listening on port ${PORT}`);
 
+	let students: Array<Student> = [];
+	let sum_note = 0.0
 
-	// CÓDIGO PARA ATENDER OS REQUERIMENTOS
-	// R01, R02, R03, R04, R05
-	
+	for(let counter = 0; counter < 3; counter++){
+		let name = readline.question('\nNome do aluno: ')
+		let age = parseInt(readline.question('Idade do aluno: '))
+		let note = parseInt(readline.question('Nota do aluno: '))
+		
+		students.push({
+			id: counter,
+			name: name,
+			age: age,
+			note: note
+		})
+		sum_note += note
+	}
+
 });
