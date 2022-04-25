@@ -8,6 +8,7 @@ import cors from "cors";
 import helmet from "helmet";
 import Student from "./types/Student";
 
+const csv = require('objects-to-csv')
 const readline = require('readline-sync');
 
 dotenv.config();
@@ -36,7 +37,7 @@ app.use(express.json());
  * Server Activation
  */
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
 	console.log(`Listening on port ${PORT}`);
 
 	let students: Array<Student> = [];
@@ -45,7 +46,7 @@ app.listen(PORT, () => {
 	for(let counter = 0; counter < 3; counter++){
 		let name = readline.question('\nNome do aluno: ')
 		let age = parseInt(readline.question('Idade do aluno: '))
-		let note = parseInt(readline.question('Nota do aluno: '))
+		let note = parseFloat(readline.question('Nota do aluno: '))
 		
 		students.push({
 			id: counter,
@@ -56,4 +57,14 @@ app.listen(PORT, () => {
 		sum_note += note
 	}
 
+	let students_name = students.map(item => {
+		return item.name
+	})
+	
+	console.log(`\nAlunos: ${students_name}`)
+	console.log(`\nSoma da nota dos alunos: ${sum_note}`)
+
+	const archive = new csv(students)
+
+	await archive.toDisk('./students.csv')
 });
